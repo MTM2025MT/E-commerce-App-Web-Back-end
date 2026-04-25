@@ -27,7 +27,7 @@ The system design prioritizes explicit responsibility boundaries and complex rel
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/MTM2025MT/Ecommerce-angular-project.git](https://github.com/MTM2025MT/Ecommerce-angular-project.git)
+   git clone [https://github.com/MTM2025MT/E-commerce-App-Web-Back-end.git](https://github.com/MTM2025MT/E-commerce-App-Web-Back-end.git)
    Navigate to the project directory:
 
 Bash
