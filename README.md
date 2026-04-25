@@ -28,3 +28,17 @@ The system design prioritizes explicit responsibility boundaries and complex rel
 1. Clone the repository:
    ```bash
    git clone [https://github.com/MTM2025MT/Ecommerce-angular-project.git](https://github.com/MTM2025MT/Ecommerce-angular-project.git)
+   Navigate to the project directory:
+
+Bash
+cd Ecommerce-angular-project
+Update appsettings.json with your local SQL Server connection string.
+
+Apply Entity Framework migrations:
+
+Bash
+dotnet ef database update
+Run the application:
+
+Bash
+dotnet run
