@@ -7,7 +7,7 @@ namespace E_commerce_App_Web.Services
     public class CartItemMapper : ICartItemMapper
     {
         private readonly IProductRepository _productRepository;
-
+        private readonly ICustomerRepository _customerRepository;
         public CartItemMapper(IProductRepository productRepository)
         {
             _productRepository = productRepository;
@@ -36,10 +36,12 @@ namespace E_commerce_App_Web.Services
                 if (!productDictionary.TryGetValue(dto.ProductId, out var product))
                     throw new ArgumentException($"Product {dto.ProductId} not found.");
 
+                var customer = _customerRepository.GetByIdAsync(dto.CustomerId).Result; // Consider making this async as well
                 return new CartItem
                 {
                     ProductId = dto.ProductId,
                     CustomerId = dto.CustomerId,
+                    Customer = customer,
                     Quantity = dto.Quantity,
                     Product = product
                 };

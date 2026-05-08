@@ -25,12 +25,13 @@ namespace E_commerce_App_Web.Models
         public Inventory Inventory { get; set; }
         public ICollection<favoriteProductForCustomer> FavoritedBy { get; set; }
         public ICollection<CartItem> product_cartItem { get; set; }
-        [NotMapped]
+
 
 
 
         //don't know how they gonne be mapped into sql #########
-        public List<Category>? Categories { get; set; }
+        public List<ProductCategory>? Categories { get; set; }
+        [NotMapped]
         public int AvgRating
         {
             get
@@ -40,12 +41,13 @@ namespace E_commerce_App_Web.Models
             }
         } // Average rating based on reviews
         public int Reviewspoints { set { reviewpoints = reviewpoints + value; reviewcount += 1; } }  // Total points from reviews
+        [NotMapped]
         public string catalog
         {
             get
             {
                 StringBuilder sb = new StringBuilder();
-                foreach (var category in Categories ?? new List<Category>())
+                foreach (var category in Categories )
                 {
                     sb.AppendLine($"- {category}");
                 }

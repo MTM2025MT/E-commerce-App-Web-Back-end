@@ -15,11 +15,15 @@ namespace E_commerce_App_Web.Repositories
         private readonly ContextOfEntities _context;
         private readonly IProductRepository _productRepository;
         private readonly IOrderService _orderService;
-        public OrderRepository(ContextOfEntities context, IProductRepository ProductRepository, IOrderService orderService)
+        private readonly ICustomerRepository _customerRepository;
+        private readonly ICartRepository _cartRepository;
+        public OrderRepository(ContextOfEntities context, IProductRepository ProductRepository, IOrderService orderService, ICustomerRepository customerRepository, ICartRepository cartRepository)
         {
             _context = context;
             _productRepository = ProductRepository;
             _orderService = orderService;
+            _customerRepository = customerRepository;
+            _cartRepository = cartRepository;
         }
 
         public async Task<Order> CreateOrderFromCartAsync(string customerId, List<CartItemDto> cartItemsDto)
@@ -98,7 +102,10 @@ namespace E_commerce_App_Web.Repositories
         public async Task<Order> CreateOrderAsync(string curtomerId)
         {
 
-            if (_context.shoping_card.Count() <= 0)
+            var customer = await _customerRepository.GetByIdAsync(curtomerId);
+     //       var cartItemsmain = await _context.shoping_card.Where(c => c.CustomerId == curtomerId).ToListAsync();
+            var cartItemsmain = await _cartRepository.GetCartItemsByCustomerIdAsync(curtomerId);
+            if (cartItemsmain.Count() <= 0)
             {
                 throw new Exception("the shoping cart is none or has error ");
             }
@@ -111,9 +118,9 @@ namespace E_commerce_App_Web.Repositories
                 Status = OrderStatus.Pending
             };
 
-            var cartItems=_context.shoping_card.Select(c=>c).Where(c=>c.CustomerId == curtomerId).ToList();
+           // var cartItems=_context.shoping_card.Select(c=>c).Where(c=>c.CustomerId == curtomerId).ToList();
 
-            var cartByInventory = await _orderService.CartItemsToPerVendorService(cartItems);
+            var cartByInventory = await _orderService.CartItemsToPerVendorService(cartItemsmain);
 
             foreach (var InventoryGroup in cartByInventory)
             {

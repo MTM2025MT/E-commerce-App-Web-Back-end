@@ -1,16 +1,18 @@
 ﻿using E_commerce_App_Web.IRepositories;
 using E_commerce_App_Web.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace E_commerce_App_Web.Repositories
 {
     public class CartRepository : ICartRepository
     {
         private readonly ContextOfEntities _context;
-
-        public CartRepository(ContextOfEntities context)
+        private readonly ICustomerRepository _customerRepository;
+        public CartRepository(ContextOfEntities context, ICustomerRepository customerRepository)
         {
             _context = context;
+            _customerRepository = customerRepository;
         }
 
         public async Task<CartItem?> GetCartItemByProductIdAsync(string customerId, int productId)
@@ -38,7 +40,19 @@ namespace E_commerce_App_Web.Repositories
 
         public async Task<CartItem> AddCartItemAsync(CartItem cartItem)
         {
-            ArgumentNullException.ThrowIfNull(cartItem);
+            if(cartItem is null)
+            {
+                var customer=await _customerRepository.GetByIdAsync(cartItem.CustomerId);
+                 if (customer is null)
+                    throw new KeyNotFoundException($"Customer '{cartItem.CustomerId}' was not found.");
+                if(customer.Shoping_Card is null)
+                    customer.Shoping_Card = new List<CartItem>();
+                
+                 customer.Shoping_Card.Add(cartItem);
+                  _customerRepository.UpdateAsync(cartItem.CustomerId, customer);
+                  return cartItem;
+            }
+                
 
             if (string.IsNullOrWhiteSpace(cartItem.CustomerId))
                 throw new ArgumentException("Customer id is required.", nameof(cartItem.CustomerId));

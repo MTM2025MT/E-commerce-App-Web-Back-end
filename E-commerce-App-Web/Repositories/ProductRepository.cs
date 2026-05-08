@@ -85,7 +85,7 @@ namespace E_commerce_App_Web.Repositories
         public async Task<List<Product>> GetProductsByCategory(Category category)
         {
             return await _context.Products
-                .Where(p => p.Categories.Contains(category))
+                .Where(p => p.Categories.Any(c => c.Category == category))
                 .ToListAsync();
         }
         public async Task<List<Product>> GetProductsByIdsAsync(List<int> productIds)

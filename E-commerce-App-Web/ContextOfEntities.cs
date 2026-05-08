@@ -27,6 +27,18 @@ namespace E_commerce_App_Web
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ProductCategory>()
+                .HasKey(pc => new { pc.ProductId, pc.Category });
+
+            modelBuilder.Entity<ProductCategory>()
+                .HasOne(pc => pc.Product)
+                .WithMany(p => p.Categories)
+                .HasForeignKey(pc => pc.ProductId);
+
+            modelBuilder.Entity<ProductCategory>()
+                .Property(pc => pc.Category)
+
+                .HasConversion<string>();
             modelBuilder.Entity<favoriteProductForCustomer>()
                .HasKey(fp => new { fp.CustomerId, fp.ProductId });
             modelBuilder.Entity<favoriteProductForCustomer>()

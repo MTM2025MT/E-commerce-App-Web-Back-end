@@ -8,7 +8,7 @@ namespace E_commerce_App_Web.Models
         [Key]
         public int Id { get; set; }
         public int ProductId { get; set; } // Link to the original Catalog Product
-        public Product Product { get; set; }= new Product();
+        public Product Product { get; set; }
         public int Quantity { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; } // Price at the time of order
